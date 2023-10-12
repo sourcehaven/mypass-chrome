@@ -2,6 +2,8 @@ import { configure } from "./_config";
 import { getLogin, login, logout } from "./auth";
 import { selectVaultEntry, selectVaultEntries } from "./vault";
 
+import { console } from "utils";
+
 export { getLogin, login, logout } from "./auth";
 export { selectVaultEntry, selectVaultEntries } from "./vault";
 

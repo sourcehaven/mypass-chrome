@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from "axios";
 
 import store from "state";
 import { client, getAccessToken, getRefreshToken, makeUrl, removeTokens, setAccessToken, setRefreshToken } from ".";
+import { console } from "utils";
 
 const makeConfig = (config?: AxiosRequestConfig) => {
   if (config == null) {
@@ -16,13 +17,14 @@ const makeConfig = (config?: AxiosRequestConfig) => {
 
 export const getLogin = async (config?: AxiosRequestConfig) => {
   config = makeConfig(config);
+  const refreshToken = await getRefreshToken();
   const response = await client.get("/api/auth/login", {
     ...config,
-    headers: { Authorization: `Bearer ${getRefreshToken()}` },
+    headers: { Authorization: `Bearer ${refreshToken}` },
     validateStatus: null,
   });
   if (response.status !== 204) {
-    removeTokens();
+    await removeTokens();
     throw new Error("Login failed.");
   }
 };
@@ -35,20 +37,24 @@ export const login = async (
   const response = await client.post("/api/auth/login", data, config);
   if (response.status !== 201) throw new Error("Login failed.");
   const { accessToken, refreshToken } = response.data as any;
-  setAccessToken(accessToken);
-  setRefreshToken(refreshToken);
+  await setAccessToken(accessToken);
+  await setRefreshToken(refreshToken);
 };
 
 export const logout = async (config?: AxiosRequestConfig) => {
   config = makeConfig(config);
+  const refreshToken = await getRefreshToken();
+  const accessToken = await getAccessToken();
+  console.log(`Logging out token: ${refreshToken}`);
   const responseRefreshDelete = await client.delete("/api/auth/logout", {
     ...config,
-    headers: { Authorization: `Bearer ${getRefreshToken()}` },
+    headers: { Authorization: `Bearer ${refreshToken}` },
     validateStatus: null,
   });
+  console.log(`Logging out token: ${accessToken}`);
   const responseAccessDelete = await client.delete("/api/auth/logout", {
     ...config,
-    headers: { Authorization: `Bearer ${getAccessToken()}` },
+    headers: { Authorization: `Bearer ${accessToken}` },
     validateStatus: null,
   });
   if (responseAccessDelete.status !== 204 && responseRefreshDelete.status !== 204) throw new Error("Logout failed.");

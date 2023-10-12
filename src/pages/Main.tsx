@@ -12,8 +12,15 @@ export default () => {
   return (
     <Container component="div" maxWidth="xs">
       <CssBaseline />
-      <Box>
-        <Button onClick={handleLogout} sx={{ mt: 3, mb: 2 }} color="primary">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Button onClick={handleLogout} sx={{ mt: 3, mb: 2 }} variant="contained" color="inherit">
           Get Me Out of Here!
         </Button>
       </Box>

@@ -1,5 +1,6 @@
 import fetchAdapter from "utils/adapters";
 import { client, getLogin, login, logout } from "api";
+import { console } from "utils";
 
 client.defaults.adapter = fetchAdapter;
 

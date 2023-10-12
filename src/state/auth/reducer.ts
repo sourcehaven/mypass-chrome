@@ -3,6 +3,7 @@ import { AxiosRequestConfig } from "axios";
 
 import messaging from "messaging";
 import api from "api";
+import { console } from "utils";
 
 type Backend = {
   getLogin: (config?: AxiosRequestConfig) => Promise<void>;
